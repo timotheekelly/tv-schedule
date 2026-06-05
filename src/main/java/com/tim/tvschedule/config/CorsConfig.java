@@ -12,7 +12,9 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins(
                         "http://localhost:5173",
-                        "https://tv-schedule-ui.vercel.app"
+                        "https://tv-schedule-ui.vercel.app",
+                        "https://telewave.eu/",
+                        "https://www.telewave.eu/"
                 )
                 .allowedMethods("*");
     }
