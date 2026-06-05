@@ -1,7 +1,8 @@
-package com.tim.tvschedule.application.web.dto;
+package com.tim.tvschedule.domain.model;
 
 public enum StreamingPlatform {
     NETFLIX,
     DISNEY_PLUS,
-    NOW_TV
+    NOW_TV,
+    PRIME_VIDEO,
 }

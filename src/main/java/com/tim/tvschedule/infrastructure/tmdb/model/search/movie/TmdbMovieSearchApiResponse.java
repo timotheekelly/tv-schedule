@@ -1,4 +1,4 @@
-package com.tim.tvschedule.infrastructure.tmdb.model.search;
+package com.tim.tvschedule.infrastructure.tmdb.model.search.movie;
 
 import java.util.List;
 

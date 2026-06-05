@@ -1,6 +1,6 @@
-package com.tim.tvschedule.infrastructure.tmdb.model.search.movie;
+package com.tim.tvschedule.infrastructure.tmdb.model.search.tv;
 
-public record TmdbMovieSearchResult(
+public record TmdbTvShowSearchResult(
 
         Long tmdbId,
 
@@ -8,7 +8,7 @@ public record TmdbMovieSearchResult(
 
         String overview,
 
-        String releaseDate,
+        String firstAirDate,
 
         String posterPath
 

@@ -1,10 +1,9 @@
 package com.tim.tvschedule.application.web.dto;
 
-import com.tim.tvschedule.domain.model.ScheduleEntry;
-
-import java.util.List;
+import com.tim.tvschedule.domain.model.ScheduleSlotType;
 
 public record ScheduleEntryResponse(
-        List<ScheduleEntry> schedule
+        ScheduleSlotType slotType,
+        ProgramContentResponse content
 ) {
 }

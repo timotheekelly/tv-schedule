@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:8080
+
+### Get full weekly schedule
+GET {{baseUrl}}/schedule
+Accept: application/json
+
+### Get all movies
+GET {{baseUrl}}/program
+Accept: application/json
+
+### Search movie from TMDB
+GET {{baseUrl}}/api/admin/programs/search/movies?query=goodfellas
+Accept: application/json
+
+### Search movie from TMDB
+GET {{baseUrl}}/api/admin/programs/search/tvshows?query=lost
+Accept: application/json
+
+### Search for a specific movie from TMDB
+GET {{baseUrl}}/api/admin/programs/movies/769
+Accept: application/json

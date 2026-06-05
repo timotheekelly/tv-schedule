@@ -2,7 +2,9 @@ package com.tim.tvschedule.infrastructure.tmdb.model.details.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record TmdbMovieSearchApiResult(
+import java.util.List;
+
+public record TmdbMovieDetailsApiResult(
 
         Long id,
 
@@ -10,11 +12,26 @@ public record TmdbMovieSearchApiResult(
 
         String overview,
 
+        String tagline,
+
         @JsonProperty("poster_path")
         String posterPath,
 
+        @JsonProperty("backdrop_path")
+        String backdropPath,
+
         @JsonProperty("release_date")
-        String releaseDate
+        String releaseDate,
+
+        Integer runtime,
+
+        List<Genre> genres
 
 ) {
+
+        public record Genre(
+                Integer id,
+                String name
+        ) {
+        }
 }

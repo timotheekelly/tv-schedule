@@ -1,11 +1,12 @@
-package com.tim.tvschedule.infrastructure.tmdb.model.search.movie;
+package com.tim.tvschedule.infrastructure.tmdb.model.search.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record TmdbMovieSearchApiResult(
+public record TmdbTvShowSearchApiResult(
 
         Long id,
 
+        @JsonProperty("name")
         String title,
 
         String overview,
@@ -13,8 +14,8 @@ public record TmdbMovieSearchApiResult(
         @JsonProperty("poster_path")
         String posterPath,
 
-        @JsonProperty("release_date")
-        String releaseDate
+        @JsonProperty("first_air_date")
+        String firstAirDate
 
 ) {
 }

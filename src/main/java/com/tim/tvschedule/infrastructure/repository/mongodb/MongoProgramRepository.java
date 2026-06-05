@@ -5,13 +5,14 @@ import com.tim.tvschedule.domain.model.ProgramContent;
 import com.tim.tvschedule.domain.model.ProgramContentType;
 import com.tim.tvschedule.domain.model.TvShow;
 import com.tim.tvschedule.domain.repository.ProgramRepository;
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class MongoProgramRepository implements ProgramRepository {
@@ -26,38 +27,81 @@ public class MongoProgramRepository implements ProgramRepository {
 
     @Override
     public List<ProgramContent> findAll() {
-        List<ProgramContent> programs = new ArrayList<>();
-        programs.addAll(findAllMovies());
-        programs.addAll(findAllTvShows());
-        return programs;
+        return mongoTemplate.find(new Query(), Document.class, COLLECTION_NAME)
+                .stream()
+                .map(this::toProgramContent)
+                .toList();
     }
 
     @Override
     public List<ProgramContent> findByType(ProgramContentType type) {
-        return List.of();
+        if (type == null) {
+            return findAll();
+        }
+
+        Query query = Query.query(Criteria.where("type").is(type));
+
+        return mongoTemplate.find(query, Document.class, COLLECTION_NAME)
+                .stream()
+                .map(this::toProgramContent)
+                .toList();
     }
 
     @Override
-    public List<Movie> findAllMovies() {
-        Query query = Query.query(Criteria.where("type").is(ProgramContentType.MOVIE));
-        return mongoTemplate.find(query, Movie.class, COLLECTION_NAME);
+    public Optional<ProgramContent> findById(String id) {
+        Query query = Query.query(Criteria.where("_id").is(id));
+
+        Document document = mongoTemplate.findOne(
+                query,
+                Document.class,
+                COLLECTION_NAME
+        );
+
+        if (document == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(toProgramContent(document));
     }
 
     @Override
-    public List<TvShow> findAllTvShows() {
-        Query query = Query.query(Criteria.where("type").is(ProgramContentType.TV_SHOW));
-        return mongoTemplate.find(query, TvShow.class, COLLECTION_NAME);
+    public ProgramContent save(ProgramContent program) {
+        mongoTemplate.save(program, COLLECTION_NAME);
+        return program;
     }
 
     @Override
     public void saveAll(List<ProgramContent> programs) {
         for (ProgramContent program : programs) {
-            mongoTemplate.save(program, COLLECTION_NAME);
+            save(program);
         }
+    }
+
+    @Override
+    public void deleteById(String id) {
+        Query query = Query.query(Criteria.where("_id").is(id));
+        mongoTemplate.remove(query, COLLECTION_NAME);
     }
 
     @Override
     public void deleteAll() {
         mongoTemplate.remove(new Query(), COLLECTION_NAME);
+    }
+
+    private ProgramContent toProgramContent(Document document) {
+        String rawType = document.getString("type");
+
+        if (rawType == null || rawType.isBlank()) {
+            throw new IllegalStateException(
+                    "Program content document is missing type: " + document.toJson()
+            );
+        }
+
+        ProgramContentType type = ProgramContentType.valueOf(rawType);
+
+        return switch (type) {
+            case MOVIE -> mongoTemplate.getConverter().read(Movie.class, document);
+            case TV_SHOW -> mongoTemplate.getConverter().read(TvShow.class, document);
+        };
     }
 }

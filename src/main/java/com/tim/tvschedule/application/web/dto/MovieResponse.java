@@ -1,4 +1,18 @@
 package com.tim.tvschedule.application.web.dto;
 
-public record MovieResponse() {
+import com.tim.tvschedule.domain.model.ProgramContentType;
+import com.tim.tvschedule.domain.model.StreamingPlatform;
+
+public record MovieResponse(
+        String id,
+        String title,
+        ProgramContentType type,
+        String description,
+        String posterPath,
+        String posterUrl,
+        String backdropPath,
+        String backdropUrl,
+        String rottenTomatoesUrl,
+        StreamingPlatform streamingPlatform
+) implements ProgramContentResponse {
 }

@@ -1,4 +1,4 @@
-package com.tim.tvschedule.application.web.dto;
+package com.tim.tvschedule.domain.model;
 
 public enum ProgramContentType {
     MOVIE,

@@ -1,4 +1,5 @@
 package com.tim.tvschedule.application.web.dto;
 
-public class ProgramContentResponse {
+public sealed interface ProgramContentResponse
+        permits MovieResponse, TvShowResponse {
 }

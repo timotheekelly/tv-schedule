@@ -1,7 +1,9 @@
 package com.tim.tvschedule.application.web.mapper;
 
-import com.tim.tvschedule.application.web.dto.*;
-import com.tim.tvschedule.domain.model.*;
+import com.tim.tvschedule.application.web.dto.DailyScheduleResponse;
+import com.tim.tvschedule.application.web.dto.ScheduleEntryResponse;
+import com.tim.tvschedule.domain.model.ScheduleEntry;
+import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.util.Comparator;
@@ -9,11 +11,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ScheduleEntryMapper {
+@Component
+public class ScheduleResponseMapper {
 
-    public static List<DailyScheduleResponse> toDailyScheduleResponse(List<ScheduleEntry> entries) {
+    private final ProgramContentResponseMapper programContentResponseMapper;
+
+    public ScheduleResponseMapper(ProgramContentResponseMapper programContentResponseMapper) {
+        this.programContentResponseMapper = programContentResponseMapper;
+    }
+
+    public List<DailyScheduleResponse> toDailyScheduleResponse(List<ScheduleEntry> entries) {
         Map<DayOfWeek, List<ScheduleEntry>> entriesByDay = entries.stream()
-                .collect(Collectors.groupingBy(ScheduleEntry::getDay));
+                .collect(Collectors.groupingBy(ScheduleEntry::day));
 
         return entriesByDay.entrySet()
                 .stream()
@@ -22,35 +31,17 @@ public class ScheduleEntryMapper {
                         entry.getKey(),
                         entry.getValue()
                                 .stream()
-                                .map(ScheduleEntryMapper::toScheduleEntryResponse)
+                                .sorted(Comparator.comparingInt(scheduleEntry -> scheduleEntry.slotType().displayOrder()))
+                                .map(this::toScheduleEntryResponse)
                                 .toList()
                 ))
                 .toList();
     }
 
-    private static ScheduleEntryResponse toScheduleEntryResponse(ScheduleEntry entry) {
+    private ScheduleEntryResponse toScheduleEntryResponse(ScheduleEntry entry) {
         return new ScheduleEntryResponse(
-                toProgramContentResponse(entry.getContent())
+                entry.slotType(),
+                programContentResponseMapper.toProgramContentResponse(entry.content())
         );
-    }
-
-    private static ProgramContentResponse toProgramContentResponse(ProgramContent content) {
-        return new ProgramContentResponse(
-                content.getTitle(),
-                content.getDescription(),
-                content.getStreamingPlatform()
-        );
-    }
-
-    private static ProgramContentType getType(ProgramContent content) {
-        if (content instanceof Movie) {
-            return ProgramContentType.MOVIE;
-        }
-
-        if (content instanceof TvShow) {
-            return ProgramContentType.TV_SHOW;
-        }
-
-        throw new IllegalArgumentException("Unsupported program content type: " + content.getClass().getName());
     }
 }

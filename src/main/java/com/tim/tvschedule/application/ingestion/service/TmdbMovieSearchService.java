@@ -1,51 +1,37 @@
 package com.tim.tvschedule.application.ingestion.service;
 
 import com.tim.tvschedule.application.ingestion.dto.TmdbMovieSearchResponse;
+import com.tim.tvschedule.application.ingestion.mapper.TmdbMovieSearchResponseMapper;
 import com.tim.tvschedule.infrastructure.tmdb.client.TmdbClient;
-import com.tim.tvschedule.infrastructure.tmdb.model.search.TmdbMovieSearchResult;
+import com.tim.tvschedule.infrastructure.tmdb.model.details.movie.TmdbMovieDetailsApiResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class TmdbSearchService {
+public class TmdbMovieSearchService {
 
     private final TmdbClient tmdbClient;
+    private final TmdbMovieSearchResponseMapper mapper;
 
-    public TmdbSearchService(TmdbClient tmdbClient) {
+    public TmdbMovieSearchService(
+            TmdbClient tmdbClient,
+            TmdbMovieSearchResponseMapper mapper
+    ) {
         this.tmdbClient = tmdbClient;
+        this.mapper = mapper;
     }
 
     public List<TmdbMovieSearchResponse> searchMovies(String query) {
 
-        List<TmdbMovieSearchResult> results =
-                tmdbClient.searchMovies(query);
-
-        return results.stream()
-                .map(this::toResponse)
+        return tmdbClient.searchMovies(query)
+                .stream()
+                .map(mapper::toResponse)
                 .toList();
     }
 
-    private TmdbMovieSearchResponse toResponse(
-            TmdbMovieSearchResult result
-    ) {
-
-        Integer releaseYear = null;
-
-        if (result.releaseDate() != null
-                && !result.releaseDate().isBlank()
-                && result.releaseDate().length() >= 4) {
-
-            releaseYear =
-                    Integer.parseInt(result.releaseDate().substring(0, 4));
-        }
-
-        return new TmdbMovieSearchResponse(
-                result.tmdbId(),
-                result.title(),
-                result.overview(),
-                releaseYear,
-                result.posterPath()
-        );
+    public TmdbMovieDetailsApiResult getMovieDetails(Long tmdbId) {
+        return tmdbClient.getMovieDetails(tmdbId);
     }
+
 }
