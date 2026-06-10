@@ -1,4 +1,4 @@
-package com.tim.tvschedule.infrastructure.repository.mongodb.document.embedded;
+package com.tim.tvschedule.infrastructure.repository.mongodb.program.document.embedded;
 
 public class StreamingAvailabilityDocument {
 

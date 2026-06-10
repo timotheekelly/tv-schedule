@@ -1,4 +1,4 @@
-package com.tim.tvschedule.infrastructure.repository.mongodb;
+package com.tim.tvschedule.infrastructure.repository.mongodb.schedule;
 
 import com.tim.tvschedule.domain.model.ScheduleEntry;
 import com.tim.tvschedule.domain.repository.ScheduleRepository;

@@ -1,4 +1,4 @@
-package com.tim.tvschedule.infrastructure.repository.mongodb.document;
+package com.tim.tvschedule.infrastructure.repository.mongodb.program.document;
 
 public class TvShowDocument extends ProgramContentDocument {
 

@@ -1,9 +1,9 @@
-package com.tim.tvschedule.infrastructure.repository.mongodb.document;
+package com.tim.tvschedule.infrastructure.repository.mongodb.program.document;
 
-import com.tim.tvschedule.infrastructure.repository.mongodb.document.embedded.BackdropDocument;
-import com.tim.tvschedule.infrastructure.repository.mongodb.document.embedded.PosterDocument;
-import com.tim.tvschedule.infrastructure.repository.mongodb.document.embedded.RatingsDocument;
-import com.tim.tvschedule.infrastructure.repository.mongodb.document.embedded.StreamingAvailabilityDocument;
+import com.tim.tvschedule.infrastructure.repository.mongodb.program.document.embedded.BackdropDocument;
+import com.tim.tvschedule.infrastructure.repository.mongodb.program.document.embedded.PosterDocument;
+import com.tim.tvschedule.infrastructure.repository.mongodb.program.document.embedded.RatingsDocument;
+import com.tim.tvschedule.infrastructure.repository.mongodb.program.document.embedded.StreamingAvailabilityDocument;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
