@@ -7,6 +7,7 @@ import com.tim.tvschedule.application.ingestion.service.TmdbMovieSearchService;
 import com.tim.tvschedule.application.ingestion.service.TmdbTvShowSearchService;
 import com.tim.tvschedule.application.web.dto.ProgramContentResponse;
 import com.tim.tvschedule.infrastructure.tmdb.model.details.movie.TmdbMovieDetailsApiResult;
+import com.tim.tvschedule.infrastructure.tmdb.model.details.tv.TmdbTvShowDetailsApiResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,5 +64,22 @@ public class AdminProgramIngestionController {
     ) {
 
         return programIngestionService.ingestMovie(tmdbId);
+    }
+
+    // Test endpoint to verify tv show retrieved
+    @GetMapping("/tvshows/{tmdbId}")
+    public TmdbTvShowDetailsApiResult getTvShow(
+            @PathVariable Long tmdbId
+    ) {
+        return tmdbTvShowSearchService.getTvShowDetails(tmdbId);
+    }
+
+    @PostMapping("/tvshows/{tmdbId}/ingest")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProgramContentResponse ingestTvShow(
+            @PathVariable Long tmdbId
+    ) {
+
+        return programIngestionService.ingestTvShow(tmdbId);
     }
 }

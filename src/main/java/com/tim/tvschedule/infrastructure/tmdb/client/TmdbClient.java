@@ -1,6 +1,7 @@
 package com.tim.tvschedule.infrastructure.tmdb.client;
 
 import com.tim.tvschedule.infrastructure.tmdb.model.details.movie.TmdbMovieDetailsApiResult;
+import com.tim.tvschedule.infrastructure.tmdb.model.details.tv.TmdbTvShowDetailsApiResult;
 import com.tim.tvschedule.infrastructure.tmdb.model.search.movie.TmdbMovieSearchApiResponse;
 import com.tim.tvschedule.infrastructure.tmdb.model.search.movie.TmdbMovieSearchResult;
 import com.tim.tvschedule.infrastructure.tmdb.model.search.tv.TmdbTvShowSearchApiResponse;
@@ -115,5 +116,18 @@ public class TmdbClient {
                         result.posterPath()
                 ))
                 .toList();
+    }
+
+    public TmdbTvShowDetailsApiResult getTvShowDetails(Long tmdbId) {
+        LOGGER.info("Fetching TMDB tv show details for tv show '{}'", tmdbId);
+
+        return restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/tv/{tvId}")
+                        .queryParam("language", "en-US")
+                        .build(tmdbId)
+                )
+                .retrieve()
+                .body(TmdbTvShowDetailsApiResult.class);
     }
 }

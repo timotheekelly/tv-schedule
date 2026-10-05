@@ -3,6 +3,7 @@ package com.tim.tvschedule.application.ingestion.service;
 import com.tim.tvschedule.application.ingestion.dto.TmdbTvShowSearchResponse;
 import com.tim.tvschedule.application.ingestion.mapper.TmdbTvShowSearchResponseMapper;
 import com.tim.tvschedule.infrastructure.tmdb.client.TmdbClient;
+import com.tim.tvschedule.infrastructure.tmdb.model.details.tv.TmdbTvShowDetailsApiResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,5 +28,9 @@ public class TmdbTvShowSearchService {
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
+    }
+
+    public TmdbTvShowDetailsApiResult getTvShowDetails(Long tmdbId) {
+        return tmdbClient.getTvShowDetails(tmdbId);
     }
 }

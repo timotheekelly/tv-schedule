@@ -4,11 +4,16 @@ import com.tim.tvschedule.application.ingestion.mapper.TmdbRawProgramMapper;
 import com.tim.tvschedule.application.web.dto.ProgramContentResponse;
 import com.tim.tvschedule.application.web.mapper.ProgramContentResponseMapper;
 import com.tim.tvschedule.domain.enrichment.model.RawProgramData;
+import com.tim.tvschedule.domain.model.Movie;
 import com.tim.tvschedule.domain.model.ProgramContent;
+import com.tim.tvschedule.domain.model.TvShow;
 import com.tim.tvschedule.domain.repository.ProgramRepository;
 import com.tim.tvschedule.infrastructure.tmdb.client.TmdbClient;
 import com.tim.tvschedule.infrastructure.tmdb.model.details.movie.TmdbMovieDetailsApiResult;
+import com.tim.tvschedule.infrastructure.tmdb.model.details.tv.TmdbTvShowDetailsApiResult;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class ProgramIngestionService {
@@ -37,25 +42,67 @@ public class ProgramIngestionService {
         RawProgramData rawProgram =
                 tmdbRawProgramMapper.toRawProgramData(tmdbMovie);
 
-        // enrichment will be added here later
+        ProgramContent existing = findExistingByTitle(rawProgram.title());
+        if (existing != null) {
+            return programContentResponseMapper.toProgramContentResponse(existing);
+        }
 
-        ProgramContent movie =
-                buildMovie(rawProgram);
+        ProgramContent movie = buildMovie(rawProgram);
 
         return programContentResponseMapper.toProgramContentResponse(
                 programRepository.save(movie)
         );
     }
 
-    private ProgramContent buildMovie(
-            RawProgramData rawProgram
-    ) {
+    public ProgramContentResponse ingestTvShow(Long tmdbId) {
 
-        // temporary implementation
-        // replace later with enrichment pipeline
+        TmdbTvShowDetailsApiResult tmdbTvShow =
+                tmdbClient.getTvShowDetails(tmdbId);
 
-        throw new UnsupportedOperationException(
-                "Movie construction not implemented yet"
+        RawProgramData rawProgram =
+                tmdbRawProgramMapper.toRawProgramData(tmdbTvShow);
+
+        ProgramContent existing = findExistingByTitle(rawProgram.title());
+        if (existing != null) {
+            return programContentResponseMapper.toProgramContentResponse(existing);
+        }
+
+        ProgramContent tvShow = buildTvShow(rawProgram);
+
+        return programContentResponseMapper.toProgramContentResponse(
+                programRepository.save(tvShow)
+        );
+    }
+
+    private ProgramContent findExistingByTitle(String title) {
+        return programRepository.findAll().stream()
+                .filter(program -> program.getTitle() != null
+                        && program.getTitle().equalsIgnoreCase(title))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Movie buildMovie(RawProgramData rawProgram) {
+        return new Movie(
+                "movie-" + UUID.randomUUID(),
+                rawProgram.title(),
+                rawProgram.overview(),
+                rawProgram.posterPath(),
+                rawProgram.backdropPath(),
+                null,
+                null
+        );
+    }
+
+    private TvShow buildTvShow(RawProgramData rawProgram) {
+        return new TvShow(
+                "tvshow-" + UUID.randomUUID(),
+                rawProgram.title(),
+                rawProgram.overview(),
+                rawProgram.posterPath(),
+                rawProgram.backdropPath(),
+                null,
+                null
         );
     }
 }
