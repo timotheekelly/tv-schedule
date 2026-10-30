@@ -40,6 +40,8 @@ public abstract class ProgramContentDocument {
 
     private List<StreamingAvailabilityDocument> streamingAvailability;
 
+    private Long tmdbId;
+
     private Instant createdAt;
 
     private Instant updatedAt;
@@ -162,5 +164,13 @@ public abstract class ProgramContentDocument {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getTmdbId() {
+        return tmdbId;
+    }
+
+    public void setTmdbId(Long tmdbId) {
+        this.tmdbId = tmdbId;
     }
 }

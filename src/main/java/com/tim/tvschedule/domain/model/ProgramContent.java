@@ -14,6 +14,7 @@ public abstract class ProgramContent {
     private String backdropPath;
     private String rottenTomatoesUrl;
     private StreamingPlatform streamingPlatform;
+    private Long tmdbId;
 
     protected ProgramContent() {
     }
@@ -26,7 +27,8 @@ public abstract class ProgramContent {
             String posterPath,
             String backdropPath,
             String rottenTomatoesUrl,
-            StreamingPlatform streamingPlatform
+            StreamingPlatform streamingPlatform,
+            Long tmdbId
     ) {
         this.id = id;
         this.type = type;
@@ -36,7 +38,9 @@ public abstract class ProgramContent {
         this.backdropPath = backdropPath;
         this.rottenTomatoesUrl = rottenTomatoesUrl;
         this.streamingPlatform = streamingPlatform;
+        this.tmdbId = tmdbId;
     }
+
 
     public String getId() {
         return id;
@@ -68,5 +72,25 @@ public abstract class ProgramContent {
 
     public StreamingPlatform getStreamingPlatform() {
         return streamingPlatform;
+    }
+
+    public void setStreamingPlatform(StreamingPlatform streamingPlatform) {
+        this.streamingPlatform = streamingPlatform;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public Long getTmdbId() {
+        return tmdbId;
+    }
+
+    public void setTmdbId(Long tmdbId) {
+        this.tmdbId = tmdbId;
     }
 }

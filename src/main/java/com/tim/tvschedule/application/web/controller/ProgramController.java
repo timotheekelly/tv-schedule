@@ -40,19 +40,12 @@ public class ProgramController {
         return programContentResponseMapper.toProgramContentResponse(program);
     }
 
-    @PostMapping
-    public ProgramContentResponse addProgram(@RequestBody ProgramRequest request) {
-        ProgramContent program = programService.addProgram(request.toCommand());
-        return programContentResponseMapper.toProgramContentResponse(program);
-    }
-
-    @PutMapping("/{id}")
-    public ProgramContentResponse updateProgram(
-            @PathVariable String id,
-            @RequestBody ProgramRequest request
-    ) {
-        ProgramContent program = programService.updateProgram(id, request.toCommand());
-        return programContentResponseMapper.toProgramContentResponse(program);
+    @GetMapping("/{title}")
+    public List<ProgramContentResponse> getProgramByTitle(@PathVariable String title) {
+        return programContentResponseMapper
+                .toProgramContentResponse(
+                        programService.findProgramsByTitle(title)
+                );
     }
 
     @DeleteMapping("/{id}")

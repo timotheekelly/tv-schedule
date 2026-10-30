@@ -10,6 +10,7 @@ public record ProgramCommand(
         String posterPath,
         String backdropPath,
         String rottenTomatoesUrl,
-        StreamingPlatform streamingPlatform
+        StreamingPlatform streamingPlatform,
+        Long tmdbId
 ) {
 }

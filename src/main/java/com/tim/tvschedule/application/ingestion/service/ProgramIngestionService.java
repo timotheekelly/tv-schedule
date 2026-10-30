@@ -34,6 +34,16 @@ public class ProgramIngestionService {
         this.programContentResponseMapper = programContentResponseMapper;
     }
 
+    private void appendMissingMovieInfo(RawProgramData rawProgramData, ProgramContent existing) {
+        if(existing.getPosterPath() == null) {
+            existing.setPosterPath(rawProgramData.posterPath());
+        }
+        if(existing.getBackdropPath() == null) {
+            existing.setBackdropPath(rawProgramData.backdropPath());
+        }
+        programRepository.save(existing);
+    }
+
     public ProgramContentResponse ingestMovie(Long tmdbId) {
 
         TmdbMovieDetailsApiResult tmdbMovie =
@@ -44,6 +54,7 @@ public class ProgramIngestionService {
 
         ProgramContent existing = findExistingByTitle(rawProgram.title());
         if (existing != null) {
+            appendMissingMovieInfo(rawProgram, existing);
             return programContentResponseMapper.toProgramContentResponse(existing);
         }
 
@@ -64,6 +75,7 @@ public class ProgramIngestionService {
 
         ProgramContent existing = findExistingByTitle(rawProgram.title());
         if (existing != null) {
+            // TODO add check for all fields being added
             return programContentResponseMapper.toProgramContentResponse(existing);
         }
 
@@ -90,7 +102,8 @@ public class ProgramIngestionService {
                 rawProgram.posterPath(),
                 rawProgram.backdropPath(),
                 null,
-                null
+                null,
+                rawProgram.id()
         );
     }
 
@@ -102,7 +115,8 @@ public class ProgramIngestionService {
                 rawProgram.posterPath(),
                 rawProgram.backdropPath(),
                 null,
-                null
+                null,
+                rawProgram.id()
         );
     }
 }

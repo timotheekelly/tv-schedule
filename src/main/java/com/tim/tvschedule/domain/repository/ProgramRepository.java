@@ -10,6 +10,8 @@ public interface ProgramRepository {
 
     List<ProgramContent> findAll();
 
+    List<ProgramContent> findByTitle(String title);
+
     List<ProgramContent> findByType(ProgramContentType type);
 
     Optional<ProgramContent> findById(String id);

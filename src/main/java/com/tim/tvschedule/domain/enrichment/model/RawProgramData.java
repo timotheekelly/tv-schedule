@@ -1,6 +1,5 @@
 package com.tim.tvschedule.domain.enrichment.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 

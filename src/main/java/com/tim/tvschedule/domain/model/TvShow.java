@@ -16,7 +16,8 @@ public final class TvShow extends ProgramContent {
             String posterPath,
             String backdropPath,
             String rottenTomatoesUrl,
-            StreamingPlatform streamingPlatform
+            StreamingPlatform streamingPlatform,
+            Long tmdbId
     ) {
         super(
                 id,
@@ -26,7 +27,8 @@ public final class TvShow extends ProgramContent {
                 posterPath,
                 backdropPath,
                 rottenTomatoesUrl,
-                streamingPlatform
+                streamingPlatform,
+                tmdbId
         );
     }
 }

@@ -7,6 +7,7 @@ import com.tim.tvschedule.domain.model.TvShow;
 import com.tim.tvschedule.domain.repository.ProgramRepository;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,30 @@ public class MongoProgramRepository implements ProgramRepository {
 
     public MongoProgramRepository(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
+    }
+
+    @Override
+    public List<ProgramContent> findByTitle(String title) {
+
+        Document searchStage = new Document("$search",
+                new Document("index", "title_search")
+                        .append("text", new Document("query", title)
+                                .append("path", "title"))
+        );
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                _ -> searchStage,
+                Aggregation.limit(20)
+        );
+
+        return mongoTemplate.aggregate(
+                aggregation,
+                COLLECTION_NAME,
+                Document.class)
+                .getMappedResults()
+                .stream()
+                .map(this::toProgramContent)
+                .toList();
     }
 
     @Override

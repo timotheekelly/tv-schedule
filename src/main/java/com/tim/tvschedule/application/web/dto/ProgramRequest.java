@@ -11,7 +11,8 @@ public record ProgramRequest(
         String posterPath,
         String backdropPath,
         String rottenTomatoesUrl,
-        StreamingPlatform streamingPlatform
+        StreamingPlatform streamingPlatform,
+        Long tmdbId
 ) {
     public ProgramCommand toCommand() {
         return new ProgramCommand(
@@ -21,7 +22,8 @@ public record ProgramRequest(
                 posterPath,
                 backdropPath,
                 rottenTomatoesUrl,
-                streamingPlatform
+                streamingPlatform,
+                tmdbId
         );
     }
 }
