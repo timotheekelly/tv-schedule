@@ -1,21 +1,44 @@
 @baseUrl = http://localhost:8080
 
 ### Get full weekly schedule
-GET {{baseUrl}}/schedule
+GET {{baseUrl}}/api/schedules
+Accept: application/json
+
+### Get all programs
+GET {{baseUrl}}/api/programs
 Accept: application/json
 
 ### Get all movies
-GET {{baseUrl}}/program
+GET {{baseUrl}}/api/programs?type=MOVIE
+Accept: application/json
+
+### Get all tv shows
+GET {{baseUrl}}/api/programs?type=TV_SHOW
 Accept: application/json
 
 ### Search movie from TMDB
 GET {{baseUrl}}/api/admin/programs/search/movies?query=goodfellas
 Accept: application/json
 
-### Search movie from TMDB
+### Search tv show from TMDB
 GET {{baseUrl}}/api/admin/programs/search/tvshows?query=lost
 Accept: application/json
 
 ### Search for a specific movie from TMDB
 GET {{baseUrl}}/api/admin/programs/movies/769
 Accept: application/json
+
+### Search for a specific tv show from TMDB
+GET {{baseUrl}}/api/admin/programs/tvshows/4607
+Accept: application/json
+
+### Ingest a movie from TMDB into the catalog
+POST {{baseUrl}}/api/admin/programs/movies/769/ingest
+Accept: application/json
+
+### Ingest a tv show from TMDB into the catalog
+POST {{baseUrl}}/api/admin/programs/tvshows/4607/ingest
+Accept: application/json
+
+### Clear every program in the catalog
+DELETE {{baseUrl}}/api/admin/programs

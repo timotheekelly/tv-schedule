@@ -2,6 +2,7 @@ package com.tim.tvschedule.infrastructure.tmdb.client;
 
 import com.tim.tvschedule.infrastructure.tmdb.model.details.movie.TmdbMovieDetailsApiResult;
 import com.tim.tvschedule.infrastructure.tmdb.model.details.tv.TmdbTvShowDetailsApiResult;
+import com.tim.tvschedule.infrastructure.tmdb.model.providers.ProgramWatchProviders;
 import com.tim.tvschedule.infrastructure.tmdb.model.search.movie.TmdbMovieSearchApiResponse;
 import com.tim.tvschedule.infrastructure.tmdb.model.search.movie.TmdbMovieSearchResult;
 import com.tim.tvschedule.infrastructure.tmdb.model.search.tv.TmdbTvShowSearchApiResponse;
@@ -88,6 +89,18 @@ public class TmdbClient {
                 .body(TmdbMovieDetailsApiResult.class);
     }
 
+    public ProgramWatchProviders getMovieWatchProviders(Long tmdbId) {
+        LOGGER.info("Fetching TMDB movie watch providers for movie '{}'", tmdbId);
+
+        return restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/movie/{movie_id}/watch/providers")
+                        .build(tmdbId)
+                )
+                .retrieve()
+                .body(ProgramWatchProviders.class);
+    }
+
     public List<TmdbTvShowSearchResult> searchTvShows(String query) {
         LOGGER.info("Searching TMDB for tv show '{}'", query);
 
@@ -125,9 +138,22 @@ public class TmdbClient {
                 .uri(uriBuilder -> uriBuilder
                         .path("/tv/{tvId}")
                         .queryParam("language", "en-US")
+                        .queryParam("append_to_response", "external_ids")
                         .build(tmdbId)
                 )
                 .retrieve()
                 .body(TmdbTvShowDetailsApiResult.class);
+    }
+
+    public ProgramWatchProviders getTvShowWatchProviders(Long tmdbId) {
+        LOGGER.info("Fetching TMDB tv show watch providers for tv show '{}'", tmdbId);
+
+        return restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/tv/{tv_id}/watch/providers")
+                        .build(tmdbId)
+                )
+                .retrieve()
+                .body(ProgramWatchProviders.class);
     }
 }

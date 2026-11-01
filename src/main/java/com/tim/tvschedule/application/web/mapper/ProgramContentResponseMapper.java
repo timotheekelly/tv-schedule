@@ -35,32 +35,65 @@ public class ProgramContentResponseMapper {
     }
 
     private MovieResponse toMovieResponse(Movie movie) {
+        String posterPath = movie.getImages() != null ? movie.getImages().posterPath() : null;
+        String backdropPath = movie.getImages() != null ? movie.getImages().backdropPath() : null;
+
         return new MovieResponse(
                 movie.getId(),
-                movie.getTitle(),
+                movie.getTmdbId(),
+                movie.getImdbId(),
                 movie.getType(),
-                movie.getDescription(),
-                movie.getPosterPath(),
-                tmdbImageUrlBuilder.buildPosterUrl(movie.getPosterPath()),
-                movie.getBackdropPath(),
-                tmdbImageUrlBuilder.buildBackdropUrl(movie.getBackdropPath()),
-                movie.getRottenTomatoesUrl(),
-                movie.getStreamingPlatform()
+                movie.getTitle(),
+                movie.getOriginalTitle(),
+                movie.getOverview(),
+                movie.getTagline(),
+                movie.getStatus(),
+                movie.getOriginalLanguage(),
+                movie.getGenres(),
+                movie.getImages(),
+                tmdbImageUrlBuilder.buildPosterUrl(posterPath),
+                tmdbImageUrlBuilder.buildBackdropUrl(backdropPath),
+                movie.getRatings(),
+                movie.getBelongsToCollection(),
+                movie.getStreamingAvailability(),
+                movie.getReleaseDate(),
+                movie.getReleaseYear(),
+                movie.getRuntimeMinutes(),
+                movie.getMetadataUpdatedAt(),
+                movie.getCreatedAt()
         );
     }
 
     private TvShowResponse toTvShowResponse(TvShow tvShow) {
+        String posterPath = tvShow.getImages() != null ? tvShow.getImages().posterPath() : null;
+        String backdropPath = tvShow.getImages() != null ? tvShow.getImages().backdropPath() : null;
+
         return new TvShowResponse(
                 tvShow.getId(),
-                tvShow.getTitle(),
+                tvShow.getTmdbId(),
+                tvShow.getImdbId(),
                 tvShow.getType(),
-                tvShow.getDescription(),
-                tvShow.getPosterPath(),
-                tmdbImageUrlBuilder.buildPosterUrl(tvShow.getPosterPath()),
-                tvShow.getBackdropPath(),
-                tmdbImageUrlBuilder.buildBackdropUrl(tvShow.getBackdropPath()),
-                tvShow.getRottenTomatoesUrl(),
-                tvShow.getStreamingPlatform()
+                tvShow.getTitle(),
+                tvShow.getOriginalTitle(),
+                tvShow.getOverview(),
+                tvShow.getTagline(),
+                tvShow.getStatus(),
+                tvShow.getOriginalLanguage(),
+                tvShow.getGenres(),
+                tvShow.getImages(),
+                tmdbImageUrlBuilder.buildPosterUrl(posterPath),
+                tmdbImageUrlBuilder.buildBackdropUrl(backdropPath),
+                tvShow.getRatings(),
+                tvShow.getStreamingAvailability(),
+                tvShow.getFirstAirDate(),
+                tvShow.getLastAirDate(),
+                tvShow.getReleaseYear(),
+                tvShow.getNumberOfSeasons(),
+                tvShow.getNumberOfEpisodes(),
+                tvShow.getEpisodeRuntimeMinutes(),
+                tvShow.getNetworks(),
+                tvShow.getMetadataUpdatedAt(),
+                tvShow.getCreatedAt()
         );
     }
 }

@@ -1,10 +1,11 @@
 package com.tim.tvschedule.application.web.controller;
 
+import com.tim.tvschedule.application.ingestion.service.ProgramIngestionService;
 import com.tim.tvschedule.application.web.dto.ProgramContentResponse;
-import com.tim.tvschedule.application.web.dto.ProgramRequest;
 import com.tim.tvschedule.application.web.mapper.ProgramContentResponseMapper;
 import com.tim.tvschedule.domain.model.ProgramContent;
 import com.tim.tvschedule.domain.model.ProgramContentType;
+import com.tim.tvschedule.domain.model.StreamingProvider;
 import com.tim.tvschedule.domain.service.ProgramService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +17,15 @@ public class ProgramController {
 
     private final ProgramService programService;
     private final ProgramContentResponseMapper programContentResponseMapper;
+    private final ProgramIngestionService programIngestionService;
 
     public ProgramController(
             ProgramService programService,
-            ProgramContentResponseMapper programContentResponseMapper
-    ) {
+            ProgramContentResponseMapper programContentResponseMapper,
+            ProgramIngestionService programIngestionService) {
         this.programService = programService;
         this.programContentResponseMapper = programContentResponseMapper;
+        this.programIngestionService = programIngestionService;
     }
 
     @GetMapping
@@ -40,12 +43,20 @@ public class ProgramController {
         return programContentResponseMapper.toProgramContentResponse(program);
     }
 
-    @GetMapping("/{title}")
+    @GetMapping("/programs/{title}")
     public List<ProgramContentResponse> getProgramByTitle(@PathVariable String title) {
         return programContentResponseMapper
                 .toProgramContentResponse(
                         programService.findProgramsByTitle(title)
                 );
+    }
+
+    // TODO Test endpoint
+    @GetMapping("/test/{tmdbId}")
+    public List<StreamingProvider> getWatchProvidersForMovie(
+            @PathVariable Long tmdbId
+    ) {
+        return programIngestionService.findWatchProvidersForMovie(tmdbId);
     }
 
     @DeleteMapping("/{id}")

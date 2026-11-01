@@ -82,4 +82,10 @@ public class AdminProgramIngestionController {
 
         return programIngestionService.ingestTvShow(tmdbId);
     }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void clearAllPrograms() {
+        programIngestionService.clearAllPrograms();
+    }
 }
