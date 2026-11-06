@@ -23,4 +23,6 @@ public interface ProgramRepository {
     void deleteById(String id);
 
     void deleteAll();
+
+    Optional<ProgramContent> findByTmdbId(Long tmdbId);
 }

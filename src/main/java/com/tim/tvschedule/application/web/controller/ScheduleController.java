@@ -2,6 +2,7 @@ package com.tim.tvschedule.application.web.controller;
 
 import com.tim.tvschedule.application.web.dto.DailyScheduleResponse;
 import com.tim.tvschedule.application.web.mapper.ScheduleResponseMapper;
+import com.tim.tvschedule.domain.model.ProgramContent;
 import com.tim.tvschedule.domain.service.ScheduleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,15 @@ public class ScheduleController {
         this.scheduleResponseMapper = scheduleResponseMapper;
     }
 
-    @GetMapping
-    public List<DailyScheduleResponse> getSchedule() {
-        return scheduleResponseMapper.toDailyScheduleResponse(
-                scheduleService.getSchedule()
-        );
+//    @GetMapping
+//    public List<DailyScheduleResponse> getSchedule() {
+//        return scheduleResponseMapper.toDailyScheduleResponse(
+//                scheduleService.getSchedule()
+//        );
+//    }
+
+    @PostMapping("/create/{prompt}")
+    public List<ProgramContent> createSchedule(@PathVariable String prompt) {
+        return scheduleService.createSchedule(prompt);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class TmdbClient {
@@ -53,6 +54,44 @@ public class TmdbClient {
                 .uri(uriBuilder -> uriBuilder
                         .path("/search/movie")
                         .queryParam("query", query)
+                        .queryParam("include_adult", false)
+                        .queryParam("language", "en-US")
+                        .build()
+                )
+                .retrieve()
+                .body(TmdbMovieSearchApiResponse.class);
+
+        if (response == null || response.results() == null) {
+            return List.of();
+        }
+
+        return response.results()
+                .stream()
+                .map(result -> new TmdbMovieSearchResult(
+                        result.id(),
+                        result.title(),
+                        result.overview(),
+                        result.releaseDate(),
+                        result.posterPath()
+                ))
+                .toList();
+    }
+
+    public List<TmdbMovieSearchResult> searchMovies(
+            String title,
+            Integer year
+    ) {
+
+        LOGGER.info("Searching TMDB for movie '{} {}'", title, year);
+
+        TmdbMovieSearchApiResponse response = restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search/movie")
+                        .queryParam("query", title)
+                        .queryParamIfPresent(
+                                "year",
+                                Optional.ofNullable(year)
+                        )
                         .queryParam("include_adult", false)
                         .queryParam("language", "en-US")
                         .build()

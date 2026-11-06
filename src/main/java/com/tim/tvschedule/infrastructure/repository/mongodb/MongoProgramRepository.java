@@ -113,6 +113,23 @@ public class MongoProgramRepository implements ProgramRepository {
         mongoTemplate.remove(new Query(), COLLECTION_NAME);
     }
 
+    @Override
+    public Optional<ProgramContent> findByTmdbId(Long tmdbId) {
+        Query query = Query.query(Criteria.where("tmdbId").is(tmdbId));
+
+        Document document = mongoTemplate.findOne(
+                query,
+                Document.class,
+                COLLECTION_NAME
+        );
+
+        if (document == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(toProgramContent(document));
+    }
+
     private ProgramContent toProgramContent(Document document) {
         String rawType = document.getString("type");
 
